@@ -1,5 +1,6 @@
+package Calculator;
 import javax.swing.JComponent;
 
 interface GUIComponent {
-    JComponent getComponent();
+    JComponent GetComponent();
 }
