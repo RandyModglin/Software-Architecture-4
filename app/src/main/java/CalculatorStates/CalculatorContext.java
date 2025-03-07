@@ -38,7 +38,6 @@ public class CalculatorContext {
 
     public void handleClear() {
         state.handleClear(this);
-        updateDisplay();
     }
 
 
@@ -71,7 +70,9 @@ public class CalculatorContext {
     void reset() {
         currentInput = "";
         result = "";
+        displayText = "";
         state = new StartState();
+        updateDisplay();
     }
 
 
