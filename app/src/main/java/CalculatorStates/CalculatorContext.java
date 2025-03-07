@@ -3,11 +3,16 @@ package CalculatorStates;
 import java.util.ArrayList;
 import java.util.List;
 
+import Expressions.Expression;
+import Expressions.SerializationVisitor;
+import Expressions.SymbolParser;
+
 public class CalculatorContext {
     private final List<DisplayObserver> observers = new ArrayList<>();
     private String displayText = "";
 
     private String currentInput = "";
+
     private String result = "";
 
     private CalculatorState state = new StartState();
@@ -41,24 +46,35 @@ public class CalculatorContext {
     }
 
 
-    //Evaluators
     void evaluate() {
         try {
-            result = String.valueOf(eval(currentInput));
-            displayText = result;
+            // 1. Build expression tree from input
+            Expression expression = buildExpressionTree(currentInput);
+            
+            // 2. Serialize and evaluate using visitor
+            SerializationVisitor serializer = new SerializationVisitor();
+            expression.accept(serializer); // Recursively visit all nodes
+            
+            // 3. Get result from visitor
+            result = "" + serializer.getResult();
+            
+            // 4. Send to server and update display
+            //sendToServer(serializer.getFullMessage());
+            
+            displayText = String.valueOf(result);
             state = new ResultState();
-            updateDisplay();
         } catch (Exception e) {
             displayText = "Error";
             result = "";
             state = new ErrorState();
-            updateDisplay();
         }
+        updateDisplay();
     }
 
-    private double eval(String expression) {
-        // Add your expression evaluation logic
-        return 0;
+    private Expression buildExpressionTree(String input) {
+        // Implement your parser here
+        // This could use the Interpreter pattern
+        return new SymbolParser(input).parse();
     }
 
 
