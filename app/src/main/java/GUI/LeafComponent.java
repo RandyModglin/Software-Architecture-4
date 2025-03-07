@@ -1,9 +1,9 @@
-package Calculator;
+package GUI;
 // LeafComponent class
 
 import javax.swing.JComponent;
 
-class LeafComponent implements GUIComponent {
+public class LeafComponent implements GUIComponent {
     private final JComponent component;
 
     public LeafComponent(JComponent component) {

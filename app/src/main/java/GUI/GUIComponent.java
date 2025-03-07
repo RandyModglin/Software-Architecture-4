@@ -1,4 +1,4 @@
-package Calculator;
+package GUI;
 import javax.swing.JComponent;
 
 interface GUIComponent {

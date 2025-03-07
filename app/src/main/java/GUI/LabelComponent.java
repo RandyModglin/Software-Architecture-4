@@ -1,4 +1,4 @@
-package Calculator;
+package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -7,7 +7,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-class LabelComponent implements GUIComponent {
+import CalculatorStates.DisplayObserver;
+
+public class LabelComponent implements GUIComponent, DisplayObserver {
+    @SuppressWarnings("FieldMayBeFinal")
     private JLabel label;
 
     public LabelComponent() {
@@ -28,5 +31,10 @@ class LabelComponent implements GUIComponent {
     @Override
     public JComponent GetComponent() {
         return label;
+    }
+
+    @Override
+    public void updateDisplay(String text) {
+        SetText(text);
     }
 }
