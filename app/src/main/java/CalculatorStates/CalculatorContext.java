@@ -1,5 +1,6 @@
 package CalculatorStates;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,9 @@ import Expressions.SymbolParser;
 
 public class CalculatorContext {
     private final List<DisplayObserver> observers = new ArrayList<>();
+
+    private final PrintWriter serverOut;
+
     private String displayText = "";
 
     private String currentInput = "";
@@ -17,8 +21,9 @@ public class CalculatorContext {
 
     private CalculatorState state = new StartState();
 
-    public CalculatorContext() {
+    public CalculatorContext(PrintWriter serverOut) {
         this.state = new StartState();
+        this.serverOut = serverOut;
     }
 
     public void addObserver(DisplayObserver observer) {
@@ -46,7 +51,10 @@ public class CalculatorContext {
     }
 
 
+
     void evaluate() {
+        System.out.println("Evaluating");
+        
         try {
             // 1. Build expression tree from input
             Expression expression = buildExpressionTree(currentInput);
@@ -58,22 +66,22 @@ public class CalculatorContext {
             // 3. Get result from visitor
             result = "" + serializer.getResult();
             
-            // 4. Send to server and update display
-            //sendToServer(serializer.getFullMessage());
-            
             displayText = String.valueOf(result);
+
+            //4. Send to Server
+            serverOut.println(displayText);
+
             state = new ResultState();
         } catch (Exception e) {
             displayText = "Error";
             result = "";
             state = new ErrorState();
         }
+
         updateDisplay();
     }
 
     private Expression buildExpressionTree(String input) {
-        // Implement your parser here
-        // This could use the Interpreter pattern
         return new SymbolParser(input).parse();
     }
 

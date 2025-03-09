@@ -2,6 +2,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.io.PrintWriter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,15 +16,17 @@ public class Calculator{
     
     private final JFrame frame = new JFrame("Calculator");
 
-    private LabelComponent output;
-    private CalculatorContext context;
+    private final LabelComponent output;
+    private final CalculatorContext context;
+
+    public Calculator(PrintWriter serverOut) {
+        context = new CalculatorContext(serverOut);
+        output = new LabelComponent();
+    }
 
     public void start() {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        output = new LabelComponent();
-        context = new CalculatorContext();
         
         context.addObserver(output);
 
