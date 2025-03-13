@@ -2,6 +2,8 @@
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 
 import javax.swing.JButton;
@@ -18,6 +20,8 @@ public class Calculator{
 
     private final LabelComponent output;
     private final CalculatorContext context;
+
+    private Runnable onWindowClosed;
 
     public Calculator(PrintWriter serverOut) {
         context = new CalculatorContext(serverOut);
@@ -46,6 +50,15 @@ public class Calculator{
             buttonPanel.Add(new LeafComponent(button));
         }
 
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if (onWindowClosed != null) {
+                    onWindowClosed.run(); // Notify Controller to close the socket
+                }
+            }
+        });
+
         CompositePanel mainPanel = new CompositePanel(new BorderLayout());
         mainPanel.Add(output, BorderLayout.NORTH);
         mainPanel.Add(buttonPanel, BorderLayout.CENTER);
@@ -69,5 +82,9 @@ public class Calculator{
 
     private static boolean isOperator(String label) {
         return label.matches("[+\\-*/]");
+    }
+
+    public void setOnWindowClosed(Runnable onWindowClosed) {
+        this.onWindowClosed = onWindowClosed;
     }
 }
