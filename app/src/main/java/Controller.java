@@ -19,7 +19,7 @@ public class Controller {
             // Register a shutdown hook to close the socket when the GUI exits
             calculator.setOnWindowClosed(() -> {
                 try {
-                    if (socket != null && !socket.isClosed()) {
+                    if (!socket.isClosed()) {
                         socket.close();
                         System.out.println("Socket closed gracefully.");
                     }
