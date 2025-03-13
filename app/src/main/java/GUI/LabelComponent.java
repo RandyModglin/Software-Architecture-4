@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import CalculatorStates.DisplayObserver;
@@ -18,6 +19,28 @@ public class LabelComponent implements GUIComponent, DisplayObserver {
         label.setPreferredSize(new Dimension(300, 50));
         label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         label.setHorizontalAlignment(SwingConstants.RIGHT);
+    }
+
+    @Override
+    public void showErrorPrompt(Runnable onReset, Runnable onDiscard) {
+        // Show dialog directly (no need for frame reference)
+        int choice = JOptionPane.showOptionDialog(
+            null,  // Use null for parent component
+            "Consecutive operators detected!\nWould you like to reset or discard?",
+            "Invalid Input",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.ERROR_MESSAGE,
+            null,
+            new String[]{"Reset", "Discard"},
+            "Discard"
+        );
+
+        // Execute the appropriate callback
+        if (choice == JOptionPane.YES_OPTION) {
+            onReset.run();
+        } else {
+            onDiscard.run();
+        }
     }
 
     public void SetText(String text) {

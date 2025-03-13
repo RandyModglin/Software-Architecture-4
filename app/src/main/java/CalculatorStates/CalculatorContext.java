@@ -99,6 +99,25 @@ public class CalculatorContext {
         updateDisplay();
     }
 
+    public void discardLastInput() {
+        if (!currentInput.isEmpty()) {
+            displayText = currentInput;
+            updateDisplay();
+        }
+    }
+
+    public void promptForErrorAction() {
+        notifyObserversForError(
+            this::reset,          // Reset callback
+            this::discardLastInput // Discard callback
+        );
+    }
+    
+    private void notifyObserversForError(Runnable resetAction, Runnable discardAction) {
+        for (DisplayObserver observer : observers) {
+            observer.showErrorPrompt(resetAction, discardAction);
+        }
+    }
 
 
     //Display Method

@@ -11,12 +11,12 @@ public class OperatorState implements CalculatorState {
     
     @Override
     public void handleOperator(CalculatorContext context, String operator) {
-        //Add Error handling
+        context.promptForErrorAction();
     }
     
     @Override
     public void handleEquals(CalculatorContext context) {
-        // Ignore equals in operator state
+        context.promptForErrorAction();
     }
     
     @Override
